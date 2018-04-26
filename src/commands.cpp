@@ -1281,17 +1281,27 @@ void CommandMoveNode::procresult()
     }
 }
 
-CommandDelNode::CommandDelNode(MegaClient* client, handle th, bool keepversions)
+CommandDelNode::CommandDelNode(MegaClient* client, Node *n, bool keepversions)
 {
     cmd("d");
     notself(client);
 
-    arg("n", (byte*)&th, MegaClient::NODEHANDLE);
+    arg("n", (byte*)&n->nodehandle, MegaClient::NODEHANDLE);
 
     if (keepversions)
     {
         arg("v", 1);
     }
+
+#ifdef ENABLE_SYNC
+    syncchanges = false;
+    if (n->syncdeleted == SYNCDEL_NONE && n->localnode)
+    {
+        // synced node deleted by a non sync operation
+        // force a syncdown at the end to sync the changes
+        syncchanges = true;
+    }
+#endif
 
     h = th;
     tag = client->reqtag;
@@ -1323,6 +1333,13 @@ void CommandDelNode::procresult()
                     break;
 
                 case EOO:
+                    #ifdef ENABLE_SYNC
+                    if (e == API_OK && syncchanges)
+                    {
+                        client->syncdownrequired = true;
+                        client->syncactivity = true;
+                    }
+                    #endif
                     client->app->unlink_result(h, e);
                     return;
 

@@ -5972,7 +5972,7 @@ error MegaClient::unlink(Node* n, bool keepversions)
     }
 
     bool kv = (keepversions && n->type == FILENODE);
-    reqs.add(new CommandDelNode(this, n->nodehandle, kv));
+    reqs.add(new CommandDelNode(this, n, kv));
 
     mergenewshares(1);
 

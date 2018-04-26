@@ -325,10 +325,14 @@ class MEGA_API CommandDelNode : public Command
 {
     handle h;
 
+#ifdef ENABLE_SYNC
+    bool syncchanges;
+#endif
+
 public:
     void procresult();
 
-    CommandDelNode(MegaClient*, handle, bool = false);
+    CommandDelNode(MegaClient*, Node *n, bool = false);
 };
 
 class MEGA_API CommandDelVersions : public Command
