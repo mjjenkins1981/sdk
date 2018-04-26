@@ -1303,7 +1303,7 @@ CommandDelNode::CommandDelNode(MegaClient* client, Node *n, bool keepversions)
     }
 #endif
 
-    h = th;
+    h = n->nodehandle;
     tag = client->reqtag;
 }
 
