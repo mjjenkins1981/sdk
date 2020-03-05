@@ -99,7 +99,7 @@ for l in $(cat "$PORTS_FILE" | grep -v "^#" | grep [a-z0-9A-Z]); do
 OVERLAYPORTS=("--overlay-ports=$DIR/vcpkg_extra_ports/$l" "${OVERLAYPORTS[@]}")
 done
 
-[ -z $VCPKG ] && VCPKG=$(hash vcpkg 2>/dev/null && echo "vcpkg" || echo "./vckpg")
+[ -z $VCPKG ] && VCPKG=$(hash vcpkg 2>/dev/null && echo "vcpkg" || echo "./vcpkg")
 PARENTVCPKG=$(which vcpkg 2>/dev/null | awk -F '/' '{OFS="/"; $NF=""; print $0}')
 echo mv ${PARENTVCPKG}ports{,_moved} 2>/dev/null || true
 
